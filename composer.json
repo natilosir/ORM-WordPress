@@ -11,23 +11,5 @@
   ],
   "require": {
     "php": ">=5.6"
-  },
-  "extra": {
-    "wordpress-plugin": {
-      "plugin": "ORM-WordPress.php"
-    }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "cp -r ./vendor/natilosir/orm/* ./",
-      "rm -rf ./vendor"
-    ],
-    "post-update-cmd": [
-      "cp -r ./vendor/natilosir/orm/* ./",
-      "rm -rf ./vendor"
-    ]
-  },
-  "config": {
-    "vendor-dir": "vendor"
   }
 }

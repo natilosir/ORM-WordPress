@@ -1,40 +1,97 @@
 <?php
+// move-to-plugins.php
 
-// مسیر پوشه ORM-WordPress
-$sourceDir = __DIR__ . '/ORM-WordPress';
+$sourceDir = '../orm-wordpress';
+$destDir = '../../../wp-content/plugins/ORM-WordPress';
+$vendorDir = '../../../vendor'; // Vendor directory to delete
 
-// مسیر پوشه پلاگین وردپرس
-$pluginDir = getenv('WP_PLUGIN_DIR') ? : __DIR__ . '/wp-content/plugins';
-
-// مسیر مقصد پوشه ORM-WordPress در پوشه پلاگین
-$destinationDir = $pluginDir . '/ORM-WordPress';
-
-// اطمینان از وجود پوشه مقصد
-if ( !is_dir($pluginDir) ) {
-    mkdir($pluginDir, 0755, true);
-}
-
-// تابعی برای انتقال پوشه
-function recursiveCopy( $source, $destination ) {
-    if ( !is_dir($destination) ) {
-        mkdir($destination, 0755, true);
+function moveFiles($source, $destination) {
+    // Check if source directory exists
+    if (!file_exists($source)) {
+        die("Error: Source directory '$source' does not exist.\n");
     }
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS));
-    foreach ( $iterator as $item ) {
-        $target = $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
-        if ( $item->isDir() ) {
-            mkdir($target, 0755, true);
+
+    // Create destination directory if it doesn't exist
+    if (!file_exists($destination)) {
+        if (!mkdir($destination, 0755, true)) {
+            die("Error: Failed to create destination directory '$destination'.\n");
+        }
+        echo "Created directory: $destination\n";
+    }
+
+    // Open source directory
+    $dir = opendir($source);
+    if (!$dir) {
+        die("Error: Could not open source directory '$source'.\n");
+    }
+
+    // Read directory contents
+    while (false !== ($file = readdir($dir))) {
+        // Skip these items
+        if ($file == '.' || $file == '..' || $file == '.git' || $file == 'move-to-plugins.php') {
+            continue;
+        }
+
+        $srcFile = $source . '/' . $file;
+        $destFile = $destination . '/' . $file;
+
+        // If it's a directory, process recursively
+        if (is_dir($srcFile)) {
+            moveFiles($srcFile, $destFile);
         } else {
-            copy($item, $target);
+            // Move the file
+            if (!rename($srcFile, $destFile)) {
+                echo "Warning: Failed to move '$srcFile' to '$destFile'\n";
+            } else {
+                echo "Moved: $srcFile to $destFile\n";
+            }
         }
     }
+
+    closedir($dir);
 }
 
-// انتقال پوشه ORM-WordPress به پوشه پلاگین
-if ( is_dir($sourceDir) ) {
-    echo "Moving ORM-WordPress to plugins directory...\n";
-    recursiveCopy($sourceDir, $destinationDir);
-    echo "Move completed.\n";
-} else {
-    echo "Source directory not found: $sourceDir\n";
+function deleteVendorFolder($vendorPath) {
+    if (file_exists($vendorPath)) {
+        if (!deleteDirectory($vendorPath)) {
+            echo "Warning: Failed to completely remove vendor directory\n";
+        } else {
+            echo "Successfully deleted vendor directory at $vendorPath\n";
+        }
+    } else {
+        echo "Note: Vendor directory not found at $vendorPath\n";
+    }
 }
+
+function deleteDirectory($dir) {
+    if (!file_exists($dir)) {
+        return true;
+    }
+
+    $files = array_diff(scandir($dir), array('.', '..'));
+    foreach ($files as $file) {
+        $path = $dir . '/' . $file;
+        if (is_dir($path)) {
+            deleteDirectory($path);
+        } else {
+            if (!unlink($path)) {
+                echo "Warning: Could not delete file '$path'\n";
+                return false;
+            }
+        }
+    }
+
+    return rmdir($dir);
+}
+
+// Main execution
+echo "Starting file transfer operation...\n";
+moveFiles($sourceDir, $destDir);
+echo "File transfer completed.\n";
+
+echo "Cleaning up vendor directory at $vendorDir...\n";
+deleteVendorFolder($vendorDir);
+echo "Cleanup completed.\n";
+
+echo "Operation finished successfully!\n";
+?>
