@@ -12,7 +12,6 @@ function moveFiles( $source, $destination ) {
 
     if ( !file_exists($destination) ) {
         mkdir($destination, 0755, true);
-        echo "📁 Created destination directory: $destination\n";
     }
 
     $items = scandir($source);
@@ -28,7 +27,6 @@ function moveFiles( $source, $destination ) {
             @rmdir($srcPath);
         } else {
             if ( @rename($srcPath, $destPath) ) {
-                echo "✅ Moved file: $item\n";
             } else {
                 echo "❌ Failed to move file: $item\n";
             }
@@ -57,7 +55,6 @@ function deleteDirectory( $dir ) {
     }
 
     if ( @rmdir($dir) ) {
-        echo "🗑️ Vendor directory deleted: $dir\n";
     } else {
         echo "❌ Failed to delete vendor directory: $dir\n";
     }
@@ -65,7 +62,6 @@ function deleteDirectory( $dir ) {
 
 echo "🚀 Starting transfer...\n";
 moveFiles($sourceDir, $destDir);
-echo "✅ All files moved to plugin directory.\n";
 
 deleteDirectory($vendorDir);
 echo "🏁 Done.\n";
