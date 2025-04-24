@@ -1,5 +1,5 @@
 {
-  "name": "ORM-WordPress",
+  "name": "natilosir/orm-wordpress",
   "description": "A lightweight PHP ORM package for WordPress",
   "type": "wordpress-plugin",
   "license": "MIT",
