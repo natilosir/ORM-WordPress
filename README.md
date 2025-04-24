@@ -1,6 +1,6 @@
-# Eloquent ORM in PHP
+# Eloquent ORM in WordPress
 
-This is a simple and elegant implementation of an ORM (Object-Relational Mapping) for PHP, designed to work with
+This is a simple and elegant implementation of an ORM (Object-Relational Mapping) for WordPress, designed to work with
 relational databases using fluent query building and Eloquent-style syntax.
 
 ## Requirements
