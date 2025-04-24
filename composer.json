@@ -1,5 +1,5 @@
 {
-  "name": "ORM-WordPress",
+  "name": "natilosir/orm-wordpress",
   "description": "A lightweight PHP ORM package for WordPress",
   "type": "wordpress-plugin",
   "license": "MIT",
@@ -11,6 +11,11 @@
   ],
   "require": {
     "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Natilosir\\ORMWordPress\\": "src/"
+    }
   },
   "extra": {
     "wordpress-plugin": {
