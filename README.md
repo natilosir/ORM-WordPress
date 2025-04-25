@@ -1,25 +1,31 @@
-# Eloquent ORM in WordPress
+# Eloquent ORM for WordPress
 
-This is a simple and elegant implementation of an ORM (Object-Relational Mapping) for WordPress, designed to work with
-relational databases using fluent query building and Eloquent-style syntax.
+A lightweight and powerful Object-Relational Mapping (ORM) implementation for WordPress, bringing Eloquent-style syntax
+and fluent query building to WordPress database operations.
 
 ## Requirements
 
-- PHP >= 5.4
-- Composer
+- PHP 5.4 or higher
+- WordPress 4.0 or higher
+- Composer (for installation)
 
 ## Installation
 
-You can install this ORM package via Composer:
+1. Install via Composer:
 
 ```bash
 composer require natilosir/ORM-WordPress
+```
+
+2. Move the ORM to your WordPress plugins directory:
+
+```bash
 php vendor/natilosir/orm-wordpress/move-to-plugins.php
 ```
 
+3. Activate the plugin through WordPress admin panel.
 
-
-
-
+Documentation
+For complete documentation, usage examples, and API reference, please visit:
 
 [read documents](https://github.com/natilosir/orm)
